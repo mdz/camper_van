@@ -326,9 +326,11 @@ module CamperVan
     def join_channel(name)
       campfire.rooms do |rooms|
         if room = rooms.detect { |r| "#" + irc_name(r.name) == name }
-          channel = Channel.new(name, self, room)
-          if channel.join
-            channels[name] = channel
+          if not channels.include? name
+              channel = Channel.new(name, self, room)
+              if channel.join
+                channels[name] = channel
+              end
           end
         else
           numeric_reply :err_nosuchchannel, name, "No such campfire room!"
